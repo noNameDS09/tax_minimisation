@@ -1,32 +1,33 @@
-'use client';
-import React, { useEffect, useState } from 'react'
-import axios from 'axios';
-import { toast } from 'react-hot-toast';
-import { useRouter } from 'next/navigation';
-import Link from 'next/link';
+"use client";
+import Link from "next/link";
+import React, { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import axios from "axios";
+import { toast } from "react-hot-toast";
 
-
-const SignUpPage = () => {
+export default function SignupPage() {
   const router = useRouter();
-  const [user, setUser] = useState({
+  const [user, setUser] = React.useState({
     email: "",
     password: "",
-    username: ""
-  });
+    username: "",
+  })
+  const [buttonDisabled, setButtonDisabled] = React.useState(false);
+  const [loading, setLoading] = React.useState(false);
 
-  const [buttonDisabled, setButtonDisabled] = useState(false);
-  const [loading, setLoading] = useState(false);
-
-  const onSignUp = async () => {
+  const onSignup = async () => {
     try {
       setLoading(true);
-      const response = await axios.post("api/users/signup", user);
-      console.log(`signup success ${response.data}`);
+      const response = await axios.post("/api/users/signup", user);
+      console.log("Signup success", response.data);
       router.push("/login");
 
     } catch (error: any) {
-      console.log(`signup failed :`);
-      toast.error(error.message)
+      console.log("Signup failed", error.message);
+
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -39,51 +40,47 @@ const SignUpPage = () => {
   }, [user]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <h1>
-        {loading ? "Processing" : "Signup"}
-      </h1>
-      <hr />
-      <label htmlFor="username">username</label>
-      <input
-        className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black`}
-        type="text"
-        id='username'
-        value={user.username}
-        onChange={(e) => setUser({ ...user, username: e.target.value })}
-        placeholder='username'
-      />
-      <label htmlFor="email">email</label>
-      <input
-        className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black`}
-        type="text"
-        id='email'
-        value={user.email}
-        onChange={(e) => setUser({ ...user, email: e.target.value })}
-        placeholder='email'
-      />
-      <label htmlFor="password">password</label>
-      <input
-        className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600 text-black`}
-        type="password"
-        id='password'
-        value={user.password}
-        onChange={(e) => setUser({ ...user, password: e.target.value })}
-        placeholder='password'
-      />
-      <button
-        onClick={onSignUp}
-        className={`p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600`}
-      >
-        {buttonDisabled ? "No signup" : "Signup"}
-      </button>
-      <Link
-        href={'/login'}
-      >
-        Visit login page
-      </Link> 
+    <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-50">
+      <h1 className="text-3xl font-semibold text-gray-800 mb-8">{loading ? "Processing..." : "Sign Up"}</h1>
+      <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
+        <label htmlFor="username" className="block text-sm font-medium text-gray-700">Username</label>
+        <input
+          id="username"
+          type="text"
+          value={user.username}
+          onChange={(e) => setUser({ ...user, username: e.target.value })}
+          placeholder="Enter your username"
+          className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <label htmlFor="email" className="block text-sm font-medium text-gray-700 mt-4">Email</label>
+        <input
+          id="email"
+          type="email"
+          value={user.email}
+          onChange={(e) => setUser({ ...user, email: e.target.value })}
+          placeholder="Enter your email"
+          className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <label htmlFor="password" className="block text-sm font-medium text-gray-700 mt-4">Password</label>
+        <input
+          id="password"
+          type="password"
+          value={user.password}
+          onChange={(e) => setUser({ ...user, password: e.target.value })}
+          placeholder="Enter your password"
+          className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <button
+          onClick={onSignup}
+          disabled={buttonDisabled}
+          className={`w-full py-3 mt-6 text-white font-medium rounded-lg ${buttonDisabled ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'}`}
+        >
+          {loading ? "Processing..." : "Sign Up"}
+        </button>
+        <div className="mt-4 text-center">
+          <Link href="/login" className="text-sm text-blue-600 hover:underline">Already have an account? Login</Link>
+        </div>
+      </div>
     </div>
-  )
+  );
 }
-
-export default SignUpPage

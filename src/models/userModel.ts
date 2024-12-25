@@ -34,6 +34,22 @@ const userSchema = new mongoose.Schema({
     },
     verifyTokenExpiry : {
         type: Date
+    },
+    job: {
+        type: String,
+        required: [false, "Please provide your job description"],
+    },
+    salary: {
+        type: Number,
+        required: [false, 0],
+    },
+    moneyEarned: {
+        type: Number,
+        required: [false, 0],
+    },
+    taxPaid: {
+        type: Number,
+        required: [false, 0],
     }
 })
 

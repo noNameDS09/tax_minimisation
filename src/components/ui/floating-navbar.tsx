@@ -7,6 +7,8 @@ import { cn } from "@/lib/utils";
 import Link from "next/link";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useRouter } from "next/navigation";
 
 const roboto = Roboto({
   weight: "400",
@@ -19,7 +21,7 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
   const [lastScrollY, setLastScrollY] = useState(0);
   const [data, setData] = useState<any>(null); // User data
   const [loading, setLoading] = useState(false); // Loading state
-
+  const router = useRouter()
   // Handle scroll visibility
   useEffect(() => {
     const handleScroll = () => {
@@ -41,10 +43,11 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
       setLoading(true);
       try {
         const res = await axios.get('/api/users/profile');
-        setData(res.data); // Store user data
+        setData(res.data);
       } catch (error: any) {
         console.log(error.message);
         toast.error('Failed to fetch user details');
+        router.push('/login');
       } finally {
         setLoading(false);
       }
@@ -57,7 +60,6 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
     if (data) {
       window.location.href = '/profile';
     } else {
-      // If user is not logged in, go to login page or show login modal
       window.location.href = '/login';
     }
   };
@@ -69,7 +71,7 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
         animate={{ y: visible ? 0 : -100, opacity: visible ? 1 : 0 }}
         transition={{ duration: 0.2 }}
         className={cn(
-          "flex max-w-full fixed top-0 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-none dark:bg-black bg-white shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-4 pl-4 py-4 sm:pl-8 sm:pr-8 items-center justify-between space-x-4",
+          "flex max-w-full fixed top-0 inset-x-0 mx-auto border border-transparent dark:border-white/[0.2] rounded-none dark:bg-black bg-yellow-100/30 backdrop-blur-sm shadow-[0px_2px_3px_-1px_rgba(0,0,0,0.1),0px_1px_0px_0px_rgba(25,28,33,0.02),0px_0px_0px_1px_rgba(25,28,33,0.08)] z-[5000] pr-4 pl-4 py-4 sm:pl-8 sm:pr-8 items-center justify-between space-x-4",
           className
         )}
       >
@@ -85,12 +87,20 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
         </div>
         <button
           onClick={handleButtonClick}
-          className="border text-sm font-medium relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white px-4 py-2 rounded-full duration-300 hover:bg-blue-500"
+          className={`border text-sm font-medium  relative border-neutral-200 dark:border-white/[0.2] text-black dark:text-white ${data ? 'px-0 py-0' : 'px-2 py-2'} rounded-full duration-300 hover:bg-blue-500`}
         >
           {loading ? (
-            <span>Loading...</span> // Show Loading text when data is being fetched
+            <span>Loading...</span>
           ) : (
-            <span>{data ? "Profile" : "Login"}</span> // Show Profile or Login based on user data
+            <span>{data ? (<div className="relative">
+              <Avatar>
+                <AvatarImage src="/avatar.png" alt="Profile" width={40} height={30} className={`aspect-square`}/>
+                <AvatarFallback>KK</AvatarFallback>
+              </Avatar>
+              <span className="absolute bottom-0 end-0 size-3 rounded-full border-2 border-background bg-emerald-500">
+                <span className="sr-only">Online</span>
+              </span>
+            </div>) : "Login"}</span> // Show Profile or Login based on user data
           )}
         </button>
       </motion.div>

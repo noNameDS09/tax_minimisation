@@ -14,16 +14,20 @@ import { FloatingNav } from "./ui/floating-navbar";
 export default function Navbar(props:any) {
   const navItems = [
     {
-      name: "EARN",
+      name: "HOME",
       link: "/",
     },
     {
+      name: "EARN",
+      link: "/earn",
+    },
+    {
       name: "INVESTMENTS",
-      link: "/about",
+      link: "/investments",
     },
     {
       name: "TAXES",
-      link: "/contact",
+      link: "/taxes",
     },
   ];
   return (

@@ -8,14 +8,14 @@ connect();
 export async function GET(request: NextRequest) {
     try {
         const userId = await getDataFromToken(request);  // Get userId from token
-        console.log("Decoded userId:", userId);
+        // console.log("Decoded userId:", userId);
 
         if (!userId) {
             return NextResponse.json({ message: "Invalid or missing token" }, { status: 401 });
         }
 
         const user = await User.findOne({ _id: userId }).select("-password");
-        console.log(user)
+        // console.log(user)
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
         });
 
     } catch (error: any) {
-        console.error("Error fetching user profile:", error.message);
+        // console.error("Error fetching user profile:", error.message);
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
 }

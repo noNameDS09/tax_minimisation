@@ -49,7 +49,8 @@ const userSchema = new mongoose.Schema({
     },
     taxPaid: {
         type: Number,
-        required: [false, 0],
+        default: 0,
+        required: false,
     }
 })
 

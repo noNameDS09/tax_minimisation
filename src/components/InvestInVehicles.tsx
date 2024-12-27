@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Roboto } from "next/font/google";
+import { calculateTax } from "@/utils/taxCalculator";
 
 const roboto = Roboto({
     weight: '500',
@@ -33,7 +34,7 @@ const InvestInVehicles = () => {
                 quantity: invest.quantity,
                 rate: invest.price,
             });
-            setAmount(invest.price * invest.quantity);
+            setAmount(invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 0.5));
             toast.success(response.data.message);
             // router.refresh();
             window.location.reload();

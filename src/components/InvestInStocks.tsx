@@ -1,4 +1,5 @@
 'use client';
+import { calculateTax } from "@/utils/taxCalculator";
 import axios from "axios";
 import { Roboto } from "next/font/google";
 import { useRouter } from "next/navigation";
@@ -32,7 +33,7 @@ const InvestInStocks = () => {
                 quantity: invest.quantity,
                 rate: invest.price,
             });
-            setAmount(invest.price * invest.quantity);
+            setAmount(invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 0.5));
             toast.success(response.data.message);
 
             // router.refresh();

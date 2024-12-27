@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
             currentRate,
             realEstate.buyRate,
             quantity,
-            12
+            18
         );
         console.log(taxToBePaid);
         userRealEstate.taxPaid += taxToBePaid;

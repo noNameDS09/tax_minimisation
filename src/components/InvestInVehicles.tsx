@@ -22,7 +22,7 @@ const InvestInVehicles = () => {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    const buyStocks = async (e: React.FormEvent) => {
+    const buyvehicle = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
@@ -31,12 +31,13 @@ const InvestInVehicles = () => {
             const response = await axios.post('/api/users/buyvehicle', {
                 vehicleName: invest.vehicleName,
                 quantity: invest.quantity,
-                price: invest.price,
+                rate: invest.price,
             });
             setAmount(invest.price * invest.quantity);
             toast.success(response.data.message);
-            router.refresh();
-            router.push('/profile');
+            // router.refresh();
+            window.location.reload();
+            // router.push('/profile');
         } catch (error) {
             console.log('Error purchasing vehicle', error);
             setError('Failed to purchase vehicle. Please try again. Make sure you are logged in');
@@ -58,7 +59,7 @@ const InvestInVehicles = () => {
         <div className={`flex justify-center items-center mt-16`}>
             <div className={`w-full max-w-md bg-white p-8 rounded-lg shadow-lg`}>
                 <h1 className={`${roboto.className} text-3xl font-semibold text-gray-800 mb-8 text-center`}>Vehicles</h1>
-                <form onSubmit={buyStocks}>
+                <form onSubmit={buyvehicle}>
                     <div className={`mb-4`}>
                         <label htmlFor="vehicleName" className={`block text-sm font-medium text-gray-700`}>Vehicle Name</label>
                         <input

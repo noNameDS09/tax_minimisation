@@ -94,13 +94,13 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
           ) : (
             <span>{data ? (<div className="relative">
               <Avatar>
-                <AvatarImage src="/avatar.png" alt="Profile" width={40} height={30} className={`aspect-square`}/>
-                <AvatarFallback>KK</AvatarFallback>
+                <AvatarImage src="/avatar.png" alt="Profile" width={40} height={30} className={`aspect-square`} />
+                USER
               </Avatar>
               <span className="absolute bottom-0 end-0 size-3 rounded-full border-2 border-background bg-emerald-500">
                 <span className="sr-only">Online</span>
               </span>
-            </div>) : "Login"}</span> // Show Profile or Login based on user data
+            </div>) : "Login"}</span>
           )}
         </button>
       </motion.div>

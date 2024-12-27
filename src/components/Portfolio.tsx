@@ -10,7 +10,7 @@ const roboto = Roboto({
     subsets: ['latin']
 });
 const poppins = Poppins({
-    weight: '300',
+    weight: ['300', '400'],
     style: 'normal',
     subsets: ['latin']
 });
@@ -43,30 +43,31 @@ const Portfolio = () => {
 
     return (
         <div className="min-h-screen pt-1">
-            <h1 className={`${roboto.className} text-4xl font-semibold text-center text-gray-800 mb-2 mt-32 tracking-tight`}>
+            <h1 className={`${poppins.className} text-4xl font-semibold text-center text-gray-800 mb-2 mt-32 tracking-wide`}>
                 User Portfolio
             </h1>
+            <hr className={`border-blue-300`}/>
             <div className="p-6 bg-[#f0eff5] flex flex-wrap justify-center items-center md:flex-col">
-                <div className={`flex gap-x-10 justify-center items-center text-center`}>
+                <div className={`flex flex-col sm:flex-col lg:flex-row gap-x-10 justify-center items-start text-center`}>
                     <div className="mb-12">
-                        <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 mb-6`}>Stocks</h2>
+                        <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 tracking-normal mb-6`}>Stocks</h2>
                         {stockData && stockData.length > 0 ? (
                             <table className="min-w-full table-auto border-collapse border border-gray-300 rounded-lg shadow-lg overflow-hidden">
                                 <thead>
                                     <tr className="bg-[#d1cfd1] text-gray-700">
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Stock Symbol</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Quantity</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Buy Price</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Buy Date</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Stock Symbol</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Quantity</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Buy Rate</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Buy Date</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white">
                                     {stockData.map((stock: any) => (
                                         <tr key={stock._id} className="hover:bg-gray-50 transition duration-200">
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{stock.stockSymbol}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{stock.quantity}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{stock.buyPrice}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{new Date(stock.buyDate).toLocaleDateString()}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{stock.stockSymbol}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{stock.quantity}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{stock.buyRate}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{new Date(stock.buyDate).toLocaleDateString()}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -76,24 +77,24 @@ const Portfolio = () => {
                         )}
                     </div>
                     <div className="mb-12">
-                        <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 mb-6`}>Vehicles</h2>
+                        <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 tracking-normal mb-6`}>Vehicles</h2>
                         {vehicleData && vehicleData.length > 0 ? (
                             <table className="min-w-full table-auto border-collapse border border-gray-300 rounded-lg shadow-lg overflow-hidden">
                                 <thead>
                                     <tr className="bg-[#d1cfd1] text-gray-700">
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Vehicle Name</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Quantity</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Buy Price</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Buy Date</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Vehicle Name</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Quantity</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Buy Price</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Buy Date</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white">
                                     {vehicleData.map((vehicle: any) => (
                                         <tr key={vehicle._id} className="hover:bg-gray-50 transition duration-200">
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{vehicle.vehicleName}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{vehicle.quantity}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{vehicle.buyPrice}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{new Date(vehicle.buyDate).toLocaleDateString()}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{vehicle.vehicleName}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{vehicle.quantity}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{vehicle.buyPrice}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{new Date(vehicle.buyDate).toLocaleDateString()}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -105,24 +106,24 @@ const Portfolio = () => {
                 </div>
                 <div className={`flex gap-x-10 justify-center items-center text-center`}>
                     <div className="mb-12">
-                        <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 mb-6`}>Real Estate</h2>
+                        <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 tracking-normal mb-6`}>Real Estate</h2>
                         {realEstateData && realEstateData.length > 0 ? (
                             <table className="min-w-full table-auto border-collapse border border-gray-300 rounded-lg shadow-lg overflow-hidden">
                                 <thead>
                                     <tr className="bg-[#d1cfd1] text-gray-700">
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Real Estate Name</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Quantity</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Buy Price</th>
-                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-sm font-medium`}>Buy Date</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Real Estate Name</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Quantity</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Buy Price</th>
+                                        <th className={`${roboto.className} px-6 py-3 border-b text-left text-md font-medium`}>Buy Date</th>
                                     </tr>
                                 </thead>
                                 <tbody className="bg-white">
                                     {realEstateData.map((realEstate: any) => (
                                         <tr key={realEstate._id} className="hover:bg-gray-50 transition duration-200">
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{realEstate.realEstateName}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{realEstate.quantity}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{realEstate.buyPrice}</td>
-                                            <td className={`${roboto.className} px-6 py-4 border-b text-sm text-gray-700`}>{new Date(realEstate.buyDate).toLocaleDateString()}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{realEstate.realEstateName}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{realEstate.quantity}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{realEstate.buyPrice}</td>
+                                            <td className={`${roboto.className} px-6 py-4 border-b text-md text-gray-700`}>{new Date(realEstate.buyDate).toLocaleDateString()}</td>
                                         </tr>
                                     ))}
                                 </tbody>

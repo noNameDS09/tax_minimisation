@@ -27,16 +27,17 @@ const InvestInStocks = () => {
         setError(null);
 
         try {
-            const response = await axios.post('/api/users/buystocks', {
+            const response = await axios.post('/api/users/buystock', {
                 stockSymbol: invest.stockSymbol,
                 quantity: invest.quantity,
-                price: invest.price,
+                rate: invest.price,
             });
             setAmount(invest.price * invest.quantity);
             toast.success(response.data.message);
 
-            router.refresh();
-            router.push('/profile');
+            // router.refresh();
+            window.location.reload();
+            // router.push('/profile');
         } catch (error) {
             console.log('Error purchasing stocks', error);
             setError('Failed to purchase stocks. Please try again. Make sure you are logged in or try again later');

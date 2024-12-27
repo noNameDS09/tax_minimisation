@@ -16,24 +16,40 @@ const stockSchema = new mongoose.Schema(
                     type: Number,
                     required: true,
                 },
-                buyPrice: {
+                buyRate: {
                     type: Number,
                     required: true,
                 },
-                sellPrice: {
+                buyPrice: {
                     type: Number,
-                    default: null,
+                    required: true,
+                    default: 0,
                 },
                 buyDate: {
                     type: Date,
                     required: true,
                 },
+                sellRate: {
+                    type: Number,
+                    default: null,
+                },
+                sellPrice: {
+                    type: Number,
+                    required: false,
+                    default: 0,
+                },
                 sellDate: {
                     type: Date,
                     default: null,
                 },
+
             },
         ],
+        taxPaid: {
+            type: Number,
+            default: 0,
+            required: false,
+        }
     },
     { timestamps: true }
 );

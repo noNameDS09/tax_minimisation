@@ -13,8 +13,8 @@ const LogoutPage = () => {
         const response = await axios.post('/api/users/logout');
 
         if (response.data.success) {
+          // window.location.reload();
           toast.success('You have successfully logged out!');
-
           setTimeout(() => {
             router.push('/login');
           }, 1000);
@@ -26,7 +26,7 @@ const LogoutPage = () => {
     };
 
     logout();
-  }, [router]);
+  }, []);
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen py-2">

@@ -2,7 +2,7 @@ import { connect } from "@/dbconfig/dbConfig";
 import Stock from "@/models/stockModel";
 import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
-import calculateTax from "@/utils/taxCalculator";
+import { calculateTax } from "@/utils/taxCalculator";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -11,9 +11,12 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
-        const { stockSymbol, quantity, price } = reqBody;
-        const tax = calculateTax(quantity * price);
-        const totalCost = quantity * price + tax;
+        const { stockSymbol, quantity, rate } = reqBody;
+        const tax = calculateTax(quantity * rate, 0.5);
+        console.log(stockSymbol)
+        console.log(quantity)
+        console.log(rate)
+        const totalCost = quantity * rate + tax;
         const userId = await getDataFromToken(request);
 
         if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
@@ -31,54 +34,60 @@ export async function POST(request: NextRequest) {
             );
         }
 
+        if (typeof user.moneyEarned !== 'number' || isNaN(user.moneyEarned)) {
+            return NextResponse.json(
+                { error: "Invalid moneyEarned value" },
+                { status: 400 }
+            );
+        }
+
         if (user.moneyEarned < totalCost) {
             return NextResponse.json(
                 { error: "Insufficient funds" },
                 { status: 400 }
             );
         }
-
-        const Tax = totalCost - (quantity * price);
-        console.log(typeof(Tax))
+        console.log(user.taxPaid)
         user.moneyEarned -= totalCost;
-        if(user.taxPaid === null || user.taxPaid === undefined){
-            user.taxPaid = 0;
-        }
-        user.taxPaid += Tax;
+        console.log(`here1`)
+        user.taxPaid = (typeof user.taxPaid === 'number' && !isNaN(user.taxPaid)) ? user.taxPaid : 0;
+        user.taxPaid += tax;
+        console.log(`here2`)
+        console.log(tax)
+        
         await user.save();
-
+        console.log(`here3`)
+        
         let existingStock = await Stock.findOne({ _id: userId });
-
+        console.log(`here4`)
+        
         if (existingStock) {
-            const stockIndex = existingStock.stocks.findIndex(
-                (stock: any) => stock.stockSymbol === stockSymbol
-            );
-
-            if (stockIndex !== -1) {
-                existingStock.stocks[stockIndex].quantity += quantity;
-                existingStock.stocks[stockIndex].buyPrice = price;
-                existingStock.stocks[stockIndex].buyDate = new Date();
-            } else {
-                existingStock.stocks.push({
-                    stockSymbol,
-                    quantity,
-                    buyPrice: price,
-                    buyDate: new Date(),
-                });
-            }
-
+            console.log(`here5`)
+            existingStock.stocks.push({
+                stockSymbol,
+                quantity,
+                buyRate: rate,
+                buyPrice: totalCost,
+                buyDate: new Date(),
+            });
+            existingStock.taxPaid += tax;
+            console.log(`here6`)
+            
             await existingStock.save();
         } else {
+            console.log(`here7`)
             const newStock = new Stock({
                 _id: userId,
                 stocks: [
                     {
                         stockSymbol: stockSymbol,
                         quantity: quantity,
-                        buyPrice: price,
+                        buyRate: rate,
+                        buyPrice: totalCost,
                         buyDate: new Date(),
                     },
                 ],
+                taxPaid: tax,
             });
 
             await newStock.save();
@@ -90,7 +99,7 @@ export async function POST(request: NextRequest) {
             stock: {
                 stockSymbol: stockSymbol,
                 quantity,
-                buyPrice: price,
+                buyPrice: totalCost,
                 buyDate: new Date(),
             },
         });

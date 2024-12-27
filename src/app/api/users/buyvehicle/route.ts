@@ -4,16 +4,16 @@ import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
-import calculateTax from "@/utils/taxCalculator";
+import { calculateTax } from "@/utils/taxCalculator";
 
 connect();
 
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
-        const { vehicleName, quantity, price } = reqBody;
-        const tax = calculateTax(quantity * price);
-        const totalCost = quantity * price + tax;
+        const { vehicleName, quantity, rate } = reqBody;
+        const tax = calculateTax(quantity * rate, 0.5);
+        const totalCost = quantity * rate + tax;
         const userId = await getDataFromToken(request);
 
         if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
-        
+
         const user = await User.findById(userId).select("-password");
         if (!user) {
             return NextResponse.json(
@@ -30,40 +30,32 @@ export async function POST(request: NextRequest) {
                 { status: 404 }
             );
         }
-        
+
         if (user.moneyEarned < totalCost) {
             return NextResponse.json(
                 { error: "Insufficient funds" },
                 { status: 400 }
             );
         }
-        const Tax = totalCost - (quantity * price);
+
         user.moneyEarned -= totalCost;
-        if(user.taxPaid === null || user.taxPaid === undefined){
+        if (user.taxPaid === null || user.taxPaid === undefined) {
             user.taxPaid = 0;
         }
-        user.taxPaid += Tax;
+        user.taxPaid += tax;
         await user.save();
 
         let existingVehicle = await Vehicle.findOne({ _id: userId });
 
         if (existingVehicle) {
-            const stockIndex = existingVehicle.vehicles.findIndex(
-                (stock:any) => stock.vehicleName === vehicleName
-            );
-
-            if (stockIndex !== -1) {
-                existingVehicle.vehicles[stockIndex].quantity += quantity;
-                existingVehicle.vehicles[stockIndex].buyPrice = price;
-                existingVehicle.vehicles[stockIndex].buyDate = new Date();
-            } else {
-                existingVehicle.vehicles.push({
-                    vehicleName,
-                    quantity,
-                    buyPrice: price,
-                    buyDate: new Date(),
-                });
-            }
+            existingVehicle.vehicles.push({
+                vehicleName,
+                quantity,
+                buyRate: rate,
+                buyPrice: totalCost,
+                buyDate: new Date(),
+            });
+            existingVehicle.taxPaid += tax;
 
             await existingVehicle.save();
         } else {
@@ -73,10 +65,12 @@ export async function POST(request: NextRequest) {
                     {
                         vehicleName: vehicleName,
                         quantity: quantity,
-                        buyPrice: price,
+                        buyRate: rate,
+                        buyPrice: totalCost,
                         buyDate: new Date(),
                     },
                 ],
+                taxPaid: tax,
             });
 
             await newStock.save();
@@ -88,7 +82,7 @@ export async function POST(request: NextRequest) {
             stock: {
                 vehicleName: vehicleName,
                 quantity,
-                buyPrice: price,
+                buyPrice: totalCost,
                 buyDate: new Date(),
             },
         });

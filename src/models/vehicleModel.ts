@@ -16,17 +16,27 @@ const vehicleSchema = new mongoose.Schema(
                     type: Number,
                     required: true,
                 },
-                buyPrice: {
+                buyRate: {
                     type: Number,
                     required: true,
                 },
-                sellPrice: {
+                buyPrice: {
                     type: Number,
-                    default: null,
+                    required: true,
+                    default: 0,
                 },
                 buyDate: {
                     type: Date,
                     required: true,
+                },
+                sellRate: {
+                    type: Number,
+                    default: null,
+                },
+                sellPrice: {
+                    type: Number,
+                    required: false,
+                    default: 0,
                 },
                 sellDate: {
                     type: Date,
@@ -34,10 +44,16 @@ const vehicleSchema = new mongoose.Schema(
                 },
             },
         ],
+        taxPaid: {
+            type: Number,
+            default: 0,
+            required: false,
+        }
     },
     { timestamps: true }
 );
 
-const Vehicle = mongoose.models.vehicles || mongoose.model("vehicles", vehicleSchema);
+const Vehicle =
+    mongoose.models.vehicles || mongoose.model("vehicles", vehicleSchema);
 
 export default Vehicle;

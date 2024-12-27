@@ -22,24 +22,25 @@ const InvestInRealEstate = () => {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
-    const buyStocks = async (e: React.FormEvent) => {
+    const buyrealestate = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
         setError(null);
 
         try {
-            const response = await axios.post('/api/users/realestate', {
+            const response = await axios.post('/api/users/buyrealestate', {
                 realEstateName: invest.realEstateName,
                 quantity: invest.quantity,
-                price: invest.price,
+                rate: invest.price,
             });
             setAmount(invest.price * invest.quantity);
             toast.success(response.data.message);
-            router.refresh();
-            router.push('/profile');
+            // router.refresh();
+            window.location.reload();
+            // router.push('/profile');
         } catch (error) {
             console.log('Error purchasing real estate', error);
-            setError('Failed to purchase real estate. Please try again. Make sure you are logged in');
+            setError('Failed to purchase real estate OR real estate already present. Please try again. Make sure you are logged in ');
         } finally {
             setLoading(false);
         }
@@ -58,7 +59,7 @@ const InvestInRealEstate = () => {
         <div className={`flex justify-center items-center mt-16`}>
             <div className={`w-full max-w-md bg-white p-8 rounded-lg shadow-lg`}>
                 <h1 className={`${roboto.className} text-3xl font-semibold text-gray-800 mb-8 lg: text-center`}>Real Estates</h1>
-                <form onSubmit={buyStocks}>
+                <form onSubmit={buyrealestate}>
                     <div className={`mb-4`}>
                         <label htmlFor="realEstateName" className={`block text-sm font-medium text-gray-700`}>Real Estate Name</label>
                         <input

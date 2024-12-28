@@ -1,33 +1,39 @@
-"use client";
-import Link from "next/link";
+'use client';
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import Link from "next/link";
 
 export default function LoginPage() {
     const router = useRouter();
-    const [user, setUser] = React.useState({
+    const [user, setUser] = useState({
         email: "",
         password: "",
     });
-    const [first, setFirst] = useState(0);
-    const [buttonDisabled, setButtonDisabled] = React.useState(false);
-    const [loading, setLoading] = React.useState(false);
+    const [buttonDisabled, setButtonDisabled] = useState(false);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(false);
 
     const onLogin = async () => {
         try {
             setLoading(true);
             const response = await axios.post("/api/users/login", user);
-            // console.log("Login success", response.data);
+            // Success response, show success toast
             toast.success("Login success");
             window.location.reload();
             setTimeout(() => {
                 router.push("/");
             }, 10000);
         } catch (error: any) {
-            console.log("Login failed", error.message);
-            toast.error(error.message);
+            // Handle error from backend
+            if (error.response) {
+                // const errorMessage = error.response.data.error || error.message;
+                // alert(errorMessage);
+                setError(true);
+            } else {
+                alert("An error occurred. Please try again.");
+            }
         } finally {
             setLoading(false);
         }
@@ -43,7 +49,9 @@ export default function LoginPage() {
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen py-8 px-4 bg-gray-50">
-            <h1 className="text-3xl font-semibold text-gray-800 mb-8">{loading ? "Processing..." : "Login"}</h1>
+            <h1 className="text-3xl font-semibold text-gray-800 mb-8">
+                {loading ? "Processing..." : "Login"}
+            </h1>
             <div className="w-full max-w-md bg-white p-8 rounded-lg shadow-lg">
                 <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
                 <input
@@ -51,7 +59,7 @@ export default function LoginPage() {
                     type="text"
                     value={user.email}
                     onChange={(e) => setUser({ ...user, email: e.target.value })}
-                    placeholder="Enter your email"
+                    placeholder={`Enter your email`}
                     className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
                 <label htmlFor="password" className="block text-sm font-medium text-gray-700 mt-4">Password</label>
@@ -63,6 +71,15 @@ export default function LoginPage() {
                     placeholder="Enter your password"
                     className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
+                {
+                    error ? (
+                        <div className={`text-red-600 text-center mt-3 text-sm`}>
+                            {error ? "Invalid Credentials. Make sure you are registered" : ""}
+                        </div>
+                    ):(
+                        <div className="hidden"></div>
+                    )
+                }
                 <button
                     onClick={onLogin}
                     disabled={buttonDisabled}

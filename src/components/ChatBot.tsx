@@ -1,6 +1,7 @@
 'use client';
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
+import { PlaceholdersAndVanishInput } from "./ui/placeholders-and-vanish-input";
 
 interface Message {
     text: string;
@@ -73,20 +74,21 @@ const ChatBot = () => {
                     <div ref={chatEndRef} />
                 </div>
                 <form onSubmit={handleSubmit} className="flex gap-3 items-center">
+                    
                     <input
                         id="prompt"
                         name="prompt"
                         type="text"
                         value={prompt}
                         onChange={handleChange}
-                        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 text-lg"
+                        className="w-full p-3 pb-2 pt-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 text-md focus:ring-blue-500"
                         placeholder="Type your message..."
                         required
                     />
                     <button
                         type="submit"
                         disabled={loading}
-                        className={`w-12 h-12 flex items-center justify-center bg-blue-600 text-white rounded-full duration-300 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 ${loading ? 'bg-gray-400 cursor-not-allowed' : ''}`}
+                        className={`w-10 h-10 flex items-center justify-center bg-gray-400 text-white rounded-full duration-300 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500 ${loading ? 'bg-gray-400 cursor-not-allowed' : ''}`}
                     >
                         <span>&rarr;</span>
                     </button>

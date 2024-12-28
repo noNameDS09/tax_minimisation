@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
             //   'stocks.stockSymbol': stockSymbol,
             //   'stocks.buyRate': buyingRate,
         });
-        console.log(userStock.stocks);
+        // console.log(userStock.stocks);
 
         if (!userStock) {
             return NextResponse.json(
@@ -39,7 +39,7 @@ export async function POST(request: NextRequest) {
                 break;
             }
         }
-        console.log(`after userStock : ${stock}`);
+        // console.log(`after userStock : ${stock}`);
 
         if (!stock) {
             return NextResponse.json(
@@ -60,14 +60,14 @@ export async function POST(request: NextRequest) {
             currentRate,
             stock.buyRate,
             quantity,
-            12
+            0.12
         );
-        console.log(taxToBePaid);
+        // console.log(taxToBePaid);
         userStock.taxPaid += taxToBePaid;
 
         await userStock.save();
         const totalReturn = quantity * currentRate - taxToBePaid;
-        console.log(totalReturn);
+        // console.log(totalReturn);
         const user = await User.findOne({ _id: userId });
         // console.log(user)
         user.moneyEarned += totalReturn;

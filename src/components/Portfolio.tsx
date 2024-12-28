@@ -42,13 +42,16 @@ const Portfolio = () => {
     }
 
     return (
-        <div className="min-h-screen pt-1">
-            <h1 className={`${poppins.className} text-4xl font-semibold text-center text-gray-800 mb-2 mt-32 tracking-wide`}>
-                User Portfolio
-            </h1>
-            <hr className={`border-blue-300`}/>
+        <div className="min-h-fit pb-40 pt-1">
+            <div className="font-semibold relative text-black text-2xl dark:text-white px-4 py-2 rounded-full">
+                <h1 className={`${poppins.className} text-4xl font-semibold text-center text-gray-800 mb-2 mt-32 tracking-wide`}>
+                    User Portfolio
+                </h1>
+                <span className="absolute inset-x-0 w-full mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
+            </div>
             <div className="p-6 bg-[#f0eff5] flex flex-wrap justify-center items-center md:flex-col">
-                <div className={`flex flex-col sm:flex-col lg:flex-row gap-x-10 justify-center items-start text-center`}>
+                <div className={`flex flex-col sm:flex-col md:{flex-col items-center justify-center} lg:flex-row gap-x-10 justify-center items-start text-center`}>
+                    {/* stocks */}
                     <div className="mb-12">
                         <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 tracking-normal mb-6`}>Stocks</h2>
                         {stockData && stockData.length > 0 ? (
@@ -76,6 +79,8 @@ const Portfolio = () => {
                             <p className={`${roboto.className} text-gray-700`}>No stocks available.</p>
                         )}
                     </div>
+
+                    {/* vehicles */}
                     <div className="mb-12">
                         <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 tracking-normal mb-6`}>Vehicles</h2>
                         {vehicleData && vehicleData.length > 0 ? (
@@ -104,6 +109,8 @@ const Portfolio = () => {
                         )}
                     </div>
                 </div>
+
+                {/* real estates */}
                 <div className={`flex gap-x-10 justify-center items-center text-center`}>
                     <div className="mb-12">
                         <h2 className={`${roboto.className} text-2xl font-semibold text-gray-800 tracking-normal mb-6`}>Real Estate</h2>

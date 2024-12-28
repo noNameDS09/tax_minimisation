@@ -11,7 +11,7 @@ export default function SignupPage() {
     email: "",
     password: "",
     username: "",
-  })
+  });
   const [buttonDisabled, setButtonDisabled] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
 
@@ -21,15 +21,13 @@ export default function SignupPage() {
       const response = await axios.post("/api/users/signup", user);
       console.log("Signup success", response.data);
       router.push("/login");
-
     } catch (error: any) {
       console.log("Signup failed", error.message);
-
       toast.error(error.message);
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     if (user.email.length > 0 && user.password.length > 0 && user.username.length > 0) {
@@ -75,7 +73,13 @@ export default function SignupPage() {
           disabled={buttonDisabled}
           className={`w-full py-3 mt-6 text-white font-medium rounded-lg ${buttonDisabled ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'}`}
         >
-          {loading ? "Processing..." : "Sign Up"}
+          {loading ? (
+            <div className="flex justify-center items-center">
+              <div className="animate-spin border-t-4 border-white w-8 h-8 rounded-full"></div>
+            </div>
+          ) : (
+            "Sign Up"
+          )}
         </button>
         <div className="mt-4 text-center">
           <Link href="/login" className="text-sm text-blue-600 hover:underline">Already have an account? Login</Link>

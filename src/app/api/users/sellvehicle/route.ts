@@ -16,7 +16,7 @@ export async function POST(request: NextRequest) {
         const userVehicle = await Vehicle.findOne({
             _id: userId,
         });
-        console.log(userVehicle.vehicles);
+        // console.log(userVehicle.vehicles);
 
         if (!userVehicle) {
             return NextResponse.json(
@@ -56,14 +56,14 @@ export async function POST(request: NextRequest) {
             currentRate,
             vehicle.buyRate,
             quantity,
-            12
+            0.12
         );
-        console.log(taxToBePaid);
+        // console.log(taxToBePaid);
         userVehicle.taxPaid += taxToBePaid;
 
         await userVehicle.save();
         const totalReturn = quantity * currentRate - taxToBePaid;
-        console.log(totalReturn);
+        // console.log(totalReturn);
         const user = await User.findOne({ _id: userId });
         // console.log(user)
         user.moneyEarned += totalReturn;

@@ -34,7 +34,7 @@ const InvestInRealEstate = () => {
                 quantity: invest.quantity,
                 rate: invest.price,
             });
-            setAmount(invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 10));
+            setAmount(invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 0.10));
             toast.success(response.data.message);
             // router.refresh();
             window.location.reload();
@@ -48,7 +48,7 @@ const InvestInRealEstate = () => {
     };
 
     useEffect(() => {
-        setAmount(invest.quantity * invest.price);
+        setAmount(invest.quantity * invest.price + calculateTax(invest.price * invest.quantity, 0.10));
     }, [invest.quantity, invest.price]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,7 +60,7 @@ const InvestInRealEstate = () => {
         <div className={`flex justify-center items-center mt-16`}>
             <div className={`w-full max-w-md bg-white p-8 rounded-lg shadow-lg`}>
                 <h1 className={`${roboto.className} text-3xl font-semibold text-gray-800 mb-8 lg: text-center`}>Real Estates</h1>
-                <form onSubmit={buyrealestate}>
+                <form onSubmit={buyrealestate} className={`text-start`}>
                     <div className={`mb-4`}>
                         <label htmlFor="realEstateName" className={`block text-sm font-medium text-gray-700`}>Real Estate Name</label>
                         <input
@@ -112,25 +112,31 @@ const InvestInRealEstate = () => {
                             disabled
                         />
                     </div>
-    
+
                     {error && (
                         <div className={`bg-red-100 text-red-700 p-3 rounded-md mb-6`}>
                             <p>{error}</p>
                         </div>
                     )}
-    
+
                     <button
                         type="submit"
                         disabled={loading}
                         className={`w-full py-3 mt-6 text-white font-medium rounded-lg ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'}`}
                     >
-                        {loading ? "Processing..." : "Buy Real Estate"}
+                        {loading ? (
+                            <div className="flex justify-center items-center">
+                                <div className="animate-spin border-t-4 border-white w-8 h-8 rounded-full"></div>
+                            </div>
+                        ) : (
+                            "Buy Real Estate"
+                        )}
                     </button>
                 </form>
             </div>
         </div>
     );
-    
+
 }
 
 export default InvestInRealEstate;

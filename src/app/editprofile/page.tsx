@@ -135,7 +135,14 @@ const EditProfile = () => {
                         disabled={loading}
                         className={`w-full py-3 mt-6 text-white font-medium rounded-lg ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'}`}
                     >
-                        {loading ? "Processing..." : "Update Profile"}
+                        {loading ? (
+                            <div className="flex justify-center items-center">
+                                <div className="animate-spin border-t-4 border-white w-8 h-8 rounded-full"></div>
+                            </div>
+                        ) : (
+                            "Update Profile"
+                        )}
+
                     </button>
                 </form>
             </div>

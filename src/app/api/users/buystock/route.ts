@@ -12,10 +12,10 @@ export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
         const { stockSymbol, quantity, rate } = reqBody;
-        const tax = calculateTax(quantity * rate, 0.5);
-        console.log(stockSymbol)
-        console.log(quantity)
-        console.log(rate)
+        const tax = calculateTax(quantity * rate, 0.005);
+        // console.log(stockSymbol)
+        // console.log(quantity)
+        // console.log(rate)
         const totalCost = quantity * rate + tax;
         const userId = await getDataFromToken(request);
 
@@ -47,22 +47,17 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
-        console.log(user.taxPaid)
+        // console.log(`user.taxPaid : ${user.taxPaid}`)
         user.moneyEarned -= totalCost;
-        console.log(`here1`)
         user.taxPaid = (typeof user.taxPaid === 'number' && !isNaN(user.taxPaid)) ? user.taxPaid : 0;
         user.taxPaid += tax;
-        console.log(`here2`)
-        console.log(tax)
+        // console.log(`tax stock : ${tax}`)
         
         await user.save();
-        console.log(`here3`)
         
         let existingStock = await Stock.findOne({ _id: userId });
-        console.log(`here4`)
         
         if (existingStock) {
-            console.log(`here5`)
             existingStock.stocks.push({
                 stockSymbol,
                 quantity,
@@ -71,11 +66,9 @@ export async function POST(request: NextRequest) {
                 buyDate: new Date(),
             });
             existingStock.taxPaid += tax;
-            console.log(`here6`)
             
             await existingStock.save();
         } else {
-            console.log(`here7`)
             const newStock = new Stock({
                 _id: userId,
                 stocks: [

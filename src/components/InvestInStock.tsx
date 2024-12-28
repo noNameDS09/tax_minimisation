@@ -33,7 +33,7 @@ const InvestInStocks = () => {
                 quantity: invest.quantity,
                 rate: invest.price,
             });
-            setAmount(invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 0.5));
+            setAmount(invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 0.005));
             toast.success(response.data.message);
 
             // router.refresh();
@@ -48,7 +48,7 @@ const InvestInStocks = () => {
     };
 
     useEffect(() => {
-        setAmount(invest.quantity * invest.price);
+        setAmount(invest.quantity * invest.price + calculateTax(invest.price * invest.quantity, 0.005));
     }, [invest.quantity, invest.price]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -60,10 +60,10 @@ const InvestInStocks = () => {
         <div className={`flex justify-center items-center mt-16`}>
             <div className={`w-full max-w-md bg-white p-8 rounded-lg shadow-lg`}>
                 <h1 className={`${roboto.className} text-3xl font-semibold text-gray-800 mb-8 text-center`}>Stocks</h1>
-    
-                <form onSubmit={buyStocks}>
+
+                <form onSubmit={buyStocks} className={`text-start`}>
                     <div className={`mb-4`}>
-                        <label htmlFor="stockSymbol" className={`block text-sm font-medium text-gray-700`}>Stock Symbol</label>
+                        <label htmlFor="stockSymbol" className={`block text-sm font-medium  text-gray-700`}>Stock Symbol</label>
                         <input
                             id="stockSymbol"
                             name="stockSymbol"
@@ -113,25 +113,31 @@ const InvestInStocks = () => {
                             disabled
                         />
                     </div>
-    
+
                     {error && (
                         <div className={`bg-red-100 text-red-700 p-3 rounded-md mb-6`}>
                             <p>{error}</p>
                         </div>
                     )}
-    
+
                     <button
                         type="submit"
                         disabled={loading}
                         className={`w-full py-3 mt-6 text-white font-medium rounded-lg ${loading ? 'bg-gray-400' : 'bg-blue-600 hover:bg-blue-700 focus:ring-2 focus:ring-blue-500'}`}
                     >
-                        {loading ? "Processing..." : "Buy Stocks"}
+                        {loading ? (
+                            <div className="flex justify-center items-center">
+                                <div className="animate-spin border-t-4 border-white w-8 h-8 rounded-full"></div>
+                            </div>
+                        ) : (
+                            "Buy Stocks"
+                        )}
                     </button>
                 </form>
             </div>
         </div>
     );
-    
+
 }
 
 export default InvestInStocks;

@@ -22,7 +22,6 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
   const [data, setData] = useState<any>(null); // User data
   const [loading, setLoading] = useState(false); // Loading state
   const router = useRouter()
-  // Handle scroll visibility
   useEffect(() => {
     const handleScroll = () => {
       const currentScrollY = window.scrollY;
@@ -75,8 +74,8 @@ export const FloatingNav = ({ navItems, className }: { navItems: { name: string;
           className
         )}
       >
-        <div>
-          <Image src={'/globe.svg'} width={40} height={40} alt="Logo" className={`cursor-pointer`} />
+        <div className={`relative`}>
+          <Image src={'/assets/logo.jpg'} width={40} height={20} alt="Logo" className={`cursor-pointer rounded-full overflow-auto shadow-md`} />
         </div>
         <div className={`flex gap-x-14`}>
           {navItems.map((navItem, idx) => (

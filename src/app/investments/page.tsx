@@ -6,7 +6,6 @@ import Portfolio from '@/components/Portfolio';
 import SellRealEstate from '@/components/SellRealEstate';
 import SellStock from '@/components/SellStock';
 import SellVehicle from '@/components/SellVehicle';
-import TaxReport from '@/components/TaxReport';
 import { Poppins, Roboto } from "next/font/google";
 
 const roboto = Roboto({
@@ -22,7 +21,7 @@ const poppins = Poppins({
 
 const Invest = () => {
   return (
-    <div className="flex flex-col sm:flex-col md:flex-col justify-center items-center bg-gray-100 min-h-screen">
+    <div className="flex flex-col sm:flex-col md:flex-col justify-center items-center bg-[#00ffff11] min-h-screen">
       <div className="w-[95%] sm:w-[70%] md:w-[40rem] mt-0">
         <ChatBot />
       </div>

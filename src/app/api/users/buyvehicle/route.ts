@@ -5,6 +5,7 @@ import { getDataFromToken } from "@/utils/getDataFromToken";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 import { calculateTax } from "@/utils/taxCalculator";
+import { logTransaction } from "@/utils/logTransaction";
 
 connect();
 
@@ -31,14 +32,14 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (user.moneyEarned < totalCost) {
+        if (user.salary < totalCost) {
             return NextResponse.json(
                 { error: "Insufficient funds" },
                 { status: 400 }
             );
         }
 
-        user.moneyEarned -= totalCost;
+        user.salary -= totalCost;
         if (user.taxPaid === null || user.taxPaid === undefined) {
             user.taxPaid = 0;
         }
@@ -75,6 +76,19 @@ export async function POST(request: NextRequest) {
 
             await newStock.save();
         }
+
+        // for transaction history
+        const assetDetails = {
+            vehicleName: vehicleName,
+        };
+        
+        await logTransaction(
+            userId,
+            "vehicle",
+            assetDetails,
+            totalCost,
+            quantity
+        );
 
         return NextResponse.json({
             message: "Vehicle purchased successfully",

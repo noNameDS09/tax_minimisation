@@ -2,7 +2,9 @@ import { connect } from "@/dbconfig/dbConfig";
 import Stock from "@/models/stockModel";
 import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
+import { logTransaction } from "@/utils/logTransaction";
 import { calculateTax } from "@/utils/taxCalculator";
+import axios from "axios";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -13,9 +15,6 @@ export async function POST(request: NextRequest) {
         const reqBody = await request.json();
         const { stockSymbol, quantity, rate } = reqBody;
         const tax = calculateTax(quantity * rate, 0.005);
-        // console.log(stockSymbol)
-        // console.log(quantity)
-        // console.log(rate)
         const totalCost = quantity * rate + tax;
         const userId = await getDataFromToken(request);
 
@@ -34,21 +33,21 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (typeof user.moneyEarned !== 'number' || isNaN(user.moneyEarned)) {
+        if (typeof user.salary !== 'number' || isNaN(user.salary)) {
             return NextResponse.json(
-                { error: "Invalid moneyEarned value" },
+                { error: "Invalid salary value" },
                 { status: 400 }
             );
         }
 
-        if (user.moneyEarned < totalCost) {
+        if (user.salary < totalCost) {
             return NextResponse.json(
                 { error: "Insufficient funds" },
                 { status: 400 }
             );
         }
         // console.log(`user.taxPaid : ${user.taxPaid}`)
-        user.moneyEarned -= totalCost;
+        user.salary -= totalCost;
         user.taxPaid = (typeof user.taxPaid === 'number' && !isNaN(user.taxPaid)) ? user.taxPaid : 0;
         user.taxPaid += tax;
         // console.log(`tax stock : ${tax}`)
@@ -85,6 +84,11 @@ export async function POST(request: NextRequest) {
 
             await newStock.save();
         }
+        const assetDetails = {
+            stockSymbol: stockSymbol
+        }
+        // for transaction history
+        await logTransaction(userId, "stock", assetDetails, totalCost, quantity);
 
         return NextResponse.json({
             message: "Stock purchased successfully",

@@ -2,7 +2,8 @@ import { connect } from "@/dbconfig/dbConfig";
 import RealEstate from "@/models/realestateModel";
 import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
-import {calculateTax} from "@/utils/taxCalculator";
+import { logTransaction } from "@/utils/logTransaction";
+import { calculateTax } from "@/utils/taxCalculator";
 import mongoose from "mongoose";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -32,14 +33,14 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (user.moneyEarned < totalCost) {
+        if (user.salary < totalCost) {
             return NextResponse.json(
                 { error: "Insufficient funds" },
                 { status: 400 }
             );
         }
 
-        user.moneyEarned -= totalCost;
+        user.salary -= totalCost;
         user.taxPaid = user.taxPaid || 0;
         user.taxPaid += tax;
         await user.save();
@@ -48,14 +49,18 @@ export async function POST(request: NextRequest) {
 
         if (existingRealEstate) {
             const realEstateExists = existingRealEstate.realestates.some(
-                (realEstate:any) => realEstate.realEstateName === realEstateName
+                (realEstate: any) =>
+                    realEstate.realEstateName === realEstateName
             );
 
             if (realEstateExists) {
-                return NextResponse.json({
-                    message: "Real Estate already present.",
-                    success: false,
-                }, { status: 400 });
+                return NextResponse.json(
+                    {
+                        message: "Real Estate already present.",
+                        success: false,
+                    },
+                    { status: 400 }
+                );
             }
 
             existingRealEstate.realestates.push({
@@ -65,7 +70,7 @@ export async function POST(request: NextRequest) {
                 buyPrice: totalCost,
                 buyDate: new Date(),
             });
-            existingRealEstate.taxPaid += tax
+            existingRealEstate.taxPaid += tax;
 
             await existingRealEstate.save();
         } else {
@@ -85,6 +90,19 @@ export async function POST(request: NextRequest) {
 
             await newRealEstate.save();
         }
+
+        // for transaction history
+        const assetDetails = {
+            realEstateName: realEstateName,
+        };
+        
+        await logTransaction(
+            userId,
+            "realEstate",
+            assetDetails,
+            totalCost,
+            quantity
+        );
 
         return NextResponse.json({
             message: "Real Estate purchased successfully",

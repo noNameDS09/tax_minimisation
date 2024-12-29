@@ -36,7 +36,7 @@ const TaxReport = () => {
 
   return (
     <div className="flex items-center justify-center mt-40">
-      <div className="bg-white p-8 rounded-lg shadow-xl w-full sm:w-96">
+      <div className="bg-white p-8 rounded-lg w-full sm:w-96 hover:shadow-md hover:shadow-zinc-800 transition-shadow duration-300">
         <h1 className="text-3xl font-semibold text-center text-blue-600 mb-6">
           Tax Overview
         </h1>

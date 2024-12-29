@@ -4,14 +4,14 @@ import Image from "next/image";
 const AboutUs = () => {
     const imagesShortStories = [
         {
-            image:'./file.svg',
+            image:'/assets/finance-animation-explained-keystone-media-videos-for-financial-advisors-financial-services-05-1024x688.jpg',
             Stories: (<div>
                 <h2>What is tax</h2>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus reprehenderit laudantium velit enim sit amet, architecto earum natus vitae quam maiores nulla quod.</p>
             </div>)
         },
         {
-            image:'./file.svg',
+            image:'/assets/invest1.avif',
             Stories: (<div>
                 <h2>What is tax</h2>
                 <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Necessitatibus reprehenderit laudantium velit enim sit amet, architecto earum natus vitae quam maiores nulla quod.</p>
@@ -34,4 +34,4 @@ const AboutUs = () => {
     )
 }
 
-export default AboutUs
+export default AboutUs;

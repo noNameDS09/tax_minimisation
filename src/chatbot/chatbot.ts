@@ -4,7 +4,7 @@ import { PromptTemplate } from "@langchain/core/prompts";
 export async function Chatbot(userPrompt: string) {
   const llm = new ChatGoogleGenerativeAI({
     modelName: "gemini-1.5-pro",
-    apiKey: "AIzaSyDtB4bETfNDyvpzA_NnBKMrr56rdiOE8bQ"
+    apiKey: "API"
   });
 
   const template = `

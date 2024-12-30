@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         const reqBody = await request.json();
         const { realEstateName, quantity, rate } = reqBody;
 
-        const tax = calculateTax(quantity * rate, 0.1);
+        const tax = calculateTax(quantity * rate, 0.1).toFixed(2);
         const totalCost = quantity * rate + tax;
 
         const userId = await getDataFromToken(request);

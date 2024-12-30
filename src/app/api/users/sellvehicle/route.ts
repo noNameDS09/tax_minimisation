@@ -4,6 +4,7 @@ import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import { calculateTaxOnProfit } from "@/utils/taxCalculator";
 import { NextRequest, NextResponse } from "next/server";
+import Transaction from "@/models/transactionModel";
 
 connect();
 
@@ -66,9 +67,39 @@ export async function POST(request: NextRequest) {
         // console.log(totalReturn);
         const user = await User.findOne({ _id: userId });
         // console.log(user)
-        user.moneyEarned += totalReturn;
+        user.moneyEarned + (user.moneyEarned | 0) + totalReturn;
         user.taxPaid = (user.taxPaid || 0) + taxToBePaid;
         await user.save();
+
+        const transactionData = {
+            assetType: "vehicle",
+            assetDetails: {
+                vehicleName: vehicleName,
+            },
+            buyPrice: vehicle.buyRate,
+            buyQuantity: vehicle.quantity += quantity,
+            remainingQuantity: vehicle.quantity -= quantity,
+            buyDate: vehicle.buyDate,
+            sellPrice: currentRate,
+            sellQuantity: quantity,
+            sellDate: new Date(),
+            taxPaid: taxToBePaid,
+        };
+
+        let transaction = await Transaction.findOne({ _id: userId });
+
+        if (!transaction) {
+            transaction = new Transaction({
+                _id: userId,
+                transactions: [transactionData],
+                taxPaid: taxToBePaid,
+            });
+        } else {
+            transaction.transactions.push(transactionData);
+            transaction.taxPaid += taxToBePaid;
+        }
+
+        await transaction.save();
 
         return NextResponse.json({
             message: "Vehicle sold successfully",

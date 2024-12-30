@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
-import { symbol } from "zod";
 const finnhub = require("finnhub");
 
 const api_key = finnhub.ApiClient.instance.authentications["api_key"];
 api_key.apiKey = process.env.US_STOCKS_API_KEY;
 const finnhubClient = new finnhub.DefaultApi();
 
-const getStockQuote = (symbol:"AAPL") => {
+const getStockQuote = (symbol:string) => {
     return new Promise((resolve, reject) => {
         finnhubClient.quote(symbol, (error:any, data:any, response:any) => {
             if (error) {
@@ -18,9 +17,17 @@ const getStockQuote = (symbol:"AAPL") => {
     });
 };
 
-export async function GET() {
+export async function GET(request: Request) {
     try {
-        const data = await getStockQuote("AAPL");
+        const url = new URL(request.url);
+        const symbol = url.searchParams.get("symbol");
+        if (!symbol) {
+            return NextResponse.json(
+              { message: "Symbol is required" },
+              { status: 400 }
+            );
+          }
+        const data = await getStockQuote(symbol);
         // console.log(data);
         return NextResponse.json({ stockData: data }, {status:200});
     } catch (error:any) {

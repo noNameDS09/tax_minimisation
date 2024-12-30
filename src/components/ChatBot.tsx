@@ -13,6 +13,9 @@ const ChatBot = () => {
     const [loading, setLoading] = useState<boolean | false>(false);
     const chatEndRef = useRef<HTMLDivElement | null>(null);
     const [error, setError] = useState<string | null>(null);
+    const [showFeatures, setShowFeatures] = useState(false);
+    const [showHowItWorks, setShowHowItWorks] = useState(false);
+    const [chatVisible, setChatVisible] = useState<boolean>(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { value } = e.target;
@@ -46,16 +49,73 @@ const ChatBot = () => {
         }
     };
 
-    useEffect(() => {
-        if (chatEndRef.current) {
-            chatEndRef.current.scrollIntoView(false);
-        }
-    }, [messages]);
+
+
+    const handleStartChat = () => {
+        setChatVisible(!chatVisible); // Make chatbot visible
+    };
 
     return (
-        <div className="flex flex-wrap md:flex-col px-5 py-10 mt-16">
-            <div>Hello</div>
-            <div className="w-full md:w-2/3 lg:w-[30rem] mx-auto bg-[#f5f6fa] shadow-lg rounded-3xl p-8 space-y-6">
+        <div className="flex flex-col md:flex-col lg:flex-row px-5 py-10 mt-16 ">
+            <section className="py-16 px-4 sm:px-6 lg:px-8 selection:bg-sky-500/70 w-[50%]">
+                <div className="max-w-7xl mx-auto text-center">
+                    <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
+                        Chat with Our AI-Powered Chatbot
+                    </h2>
+                    <p className="mt-4 text-lg text-gray-600">
+                        Access instant support with our AI-powered chatbot. Our chatbot is designed to provide personalized advice
+                        and guidance in real-time on a range of financial topics.
+                    </p>
+
+                    <div className="mt-10 flex justify-center items-center gap-x-12">
+                        <div className="w-[45%]">
+                            <h3 className="text-2xl font-semibold text-gray-800 cursor-pointer" onClick={() => setShowFeatures(!showFeatures)}>
+                                Key Features
+                            </h3>
+                            {showFeatures && (
+                                <ul className="mt-4 text-lg text-gray-600 list-disc pl-5">
+                                    <li><strong>Personalized Tax-Saving Strategies:</strong> Receive tailored advice to optimize your tax savings.</li>
+                                    <li><strong>Real-Time Financial Assistance:</strong> Get quick, interactive responses to your financial queries.</li>
+                                    <li><strong>Investment Guidance:</strong> Get insights on investments and portfolio management based on your financial goals.</li>
+                                    <li><strong>Accessible 24/7:</strong> Available anytime to answer your questions, no matter the hour.</li>
+                                    <li><strong>Intelligent Conversations:</strong> Engage in real-time, intelligent conversations that help you make informed decisions.</li>
+                                </ul>
+                            )}
+                        </div>
+
+                        <div className="w-[45%]">
+                            <h3 className="text-2xl font-semibold text-gray-800 cursor-pointer" onClick={() => setShowHowItWorks(!showHowItWorks)}>
+                                How It Works
+                            </h3>
+                            {showHowItWorks && (
+                                <ul className="mt-4 text-lg text-gray-600 list-disc pl-5">
+                                    <li><strong>Step 1:</strong> Start a conversation by clicking on the chatbot icon on our website.</li>
+                                    <li><strong>Step 2:</strong> Ask questions about tax-saving, investments, or financial strategies.</li>
+                                    <li><strong>Step 3:</strong> Receive personalized answers, advice, and insights to assist you in making informed financial decisions.</li>
+                                    <li><strong>Step 4:</strong> Continue the conversation anytime to explore more details and follow-up questions.</li>
+                                </ul>
+                            )}
+                        </div>
+                    </div>
+
+                    <div className="mt-12">
+                        <p className="text-lg text-gray-600">
+                            With our AI-powered chatbot, managing your finances has never been easier. It's like having a financial advisor available at your fingertips, 24/7. Start chatting today and take control of your financial future.
+                        </p>
+                        <button
+                            className="mt-6 px-6 py-3 text-white bg-sky-500 rounded-md hover:bg-sky-600 transition duration-300"
+                            onClick={handleStartChat}
+                        >
+                            {
+                                !chatVisible ? "Start conversation" : "Stop Conversation"
+                            }
+                        </button>
+                    </div>
+                </div>
+            </section>
+            <div
+                className={`w-full md:w-2/3 lg:w-[30rem] mx-auto bg-[#f5f6fa] shadow-lg rounded-3xl p-8 space-y-6 transition-opacity duration-500 ${chatVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+            >
                 <h2 className="text-3xl font-semibold text-center text-gray-800">ChatBot</h2>
                 <div className="space-y-4 h-[calc(100vh-20.5rem)] overflow-y-auto px-4">
                     {messages.map((msg, index) => (
@@ -74,7 +134,6 @@ const ChatBot = () => {
                     <div ref={chatEndRef} />
                 </div>
                 <form onSubmit={handleSubmit} className="flex gap-3 items-center">
-                    
                     <input
                         id="prompt"
                         name="prompt"
@@ -92,7 +151,6 @@ const ChatBot = () => {
                     >
                         <span>&rarr;</span>
                     </button>
-
                 </form>
                 {error && <p className="text-red-500 text-center">{error}</p>}
             </div>

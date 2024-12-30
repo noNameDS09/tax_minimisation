@@ -29,6 +29,7 @@ const Earn = () => {
         try {
             const response = await axios.post('/api/users/clicktoearn');
             setMoneyEarned(response.data.moneyEarned);
+
             await getTotalEarnings();
         } catch (error: any) {
             toast.error("Error during click-to-earn. Please try again.");
@@ -39,6 +40,7 @@ const Earn = () => {
         setLoading(true);
         try {
             const response = await axios.get('/api/users/profile');
+
             if (response.data && response.data.data && response.data.data.moneyEarned) {
                 await setTotal(response.data.data.moneyEarned);
             } else {
@@ -54,7 +56,7 @@ const Earn = () => {
             setLoading(false);
         }
     };
-    
+
     useEffect(() => {
         getTotalEarnings();
     }, []);

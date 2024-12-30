@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
         const { stockSymbol, quantity, rate } = reqBody;
-        const tax = calculateTax(quantity * rate, 0.005);
+        const tax = calculateTax(quantity * rate, 0.005).toFixed(2);
         const totalCost = quantity * rate + tax;
         const userId = await getDataFromToken(request);
 
@@ -77,9 +77,9 @@ export async function POST(request: NextRequest) {
                         buyRate: rate,
                         buyPrice: totalCost,
                         buyDate: new Date(),
+                        taxPaid: tax,
                     },
                 ],
-                taxPaid: tax,
             });
 
             await newStock.save();

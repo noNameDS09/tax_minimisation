@@ -5,11 +5,12 @@ import { Roboto } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
+
 const roboto = Roboto({
     weight: '500',
     style: 'normal',
     subsets: ['latin']
-})
+});
 
 const InvestInStocks = () => {
     const [invest, setInvest] = useState({
@@ -22,6 +23,30 @@ const InvestInStocks = () => {
     const [error, setError] = useState<string | null>(null);
     const router = useRouter();
 
+    const stockOptions = [
+        { symbol: "AAPL", name: "APPLE" },
+        { symbol: "MSFT", name: "MICROSOFT" },
+        { symbol: "GOOGL", name: "GOOGLE" },
+        { symbol: "AMZN", name: "AMAZON" },
+        { symbol: "TSLA", name: "TESLA" },
+        { symbol: "NVDA", name: "NVIDIA" },
+        { symbol: "META", name: "META PLATFORMS" },
+        { symbol: "JPM", name: "JPMORGAN CHASE" },
+        { symbol: "V", name: "VISA" },
+        { symbol: "MA", name: "MASTERCARD" },
+    ];
+
+    const fetchStockPrice = async (symbol: string) => {
+        try {
+            const response = await axios.get(`/api/users/getstockprice?symbol=${symbol}`);
+            if (response.data && response.data.stockData) {
+                setInvest((prevInvest) => ({ ...prevInvest, price: response.data.stockData }));
+            }
+        } catch (error) {
+            setError("Failed to fetch stock price. Please try again.");
+        }
+    };
+
     const buyStocks = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
@@ -33,7 +58,8 @@ const InvestInStocks = () => {
                 quantity: invest.quantity,
                 rate: invest.price,
             });
-            setAmount(invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 0.005));
+            const totalAmount = invest.price * invest.quantity + calculateTax(invest.price * invest.quantity, 0.005);
+            setAmount(totalAmount.toFixed(2));
             toast.success(response.data.message);
 
             // router.refresh();
@@ -48,12 +74,18 @@ const InvestInStocks = () => {
     };
 
     useEffect(() => {
-        setAmount(invest.quantity * invest.price + calculateTax(invest.price * invest.quantity, 0.005));
+        const totalAmount = invest.quantity * invest.price + calculateTax(invest.price * invest.quantity, 0.005);
+        setAmount(totalAmount.toFixed(2));
     }, [invest.quantity, invest.price]);
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        setInvest((prevInvest) => ({ ...prevInvest, [name]: value }));
+        if (name === 'stockSymbol') {
+            setInvest((prevInvest) => ({ ...prevInvest, [name]: value }));
+            fetchStockPrice(value); // Fetch price whenever stock symbol changes
+        } else {
+            setInvest((prevInvest) => ({ ...prevInvest, [name]: parseFloat(value) }));
+        }
     };
 
     return (
@@ -63,17 +95,22 @@ const InvestInStocks = () => {
 
                 <form onSubmit={buyStocks} className={`text-start`}>
                     <div className={`mb-4`}>
-                        <label htmlFor="stockSymbol" className={`block text-sm font-medium  text-gray-700`}>Stock Symbol</label>
-                        <input
+                        <label htmlFor="stockSymbol" className={`block text-sm font-medium text-gray-700`}>Stock Symbol</label>
+                        <select
                             id="stockSymbol"
                             name="stockSymbol"
-                            type="text"
                             value={invest.stockSymbol}
                             onChange={handleChange}
                             className={`w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500`}
-                            placeholder="Enter Stock Symbol"
                             required
-                        />
+                        >
+                            <option value="">Select Stock</option>
+                            {stockOptions.map((option) => (
+                                <option key={option.symbol} value={option.symbol}>
+                                    {option.symbol} ({option.name})
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className={`mb-4`}>
                         <label htmlFor="quantity" className={`block text-sm font-medium text-gray-700`}>Quantity</label>
@@ -137,7 +174,6 @@ const InvestInStocks = () => {
             </div>
         </div>
     );
-
-}
+};
 
 export default InvestInStocks;

@@ -1,5 +1,6 @@
 import { connect } from "@/dbconfig/dbConfig";
 import Stock from "@/models/stockModel";
+import Transaction from "@/models/transactionModel";
 import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import { calculateTaxOnProfit } from "@/utils/taxCalculator";
@@ -70,9 +71,39 @@ export async function POST(request: NextRequest) {
         // console.log(totalReturn);
         const user = await User.findOne({ _id: userId });
         // console.log(user)
-        user.moneyEarned += totalReturn;
+        user.moneyEarned + (user.moneyEarned | 0) +  totalReturn;
         user.taxPaid = (user.taxPaid || 0) + taxToBePaid;
         await user.save();
+
+        const transactionData = {
+            assetType: "stock",
+            assetDetails: {
+                stockSymbol: stockSymbol,
+            },
+            buyPrice: stock.buyRate,
+            buyQuantity: stock.quantity += quantity,
+            remainingQuantity: stock.quantity -=quantity,
+            buyDate: stock.buyDate,
+            sellPrice: currentRate,
+            sellQuantity: quantity,
+            sellDate: new Date(),
+            taxPaid: taxToBePaid,
+        };
+
+        let transaction = await Transaction.findOne({ _id: userId });
+
+        if (!transaction) {
+            transaction = new Transaction({
+                _id: userId,
+                transactions: [transactionData],
+                taxPaid: taxToBePaid,
+            });
+        } else {
+            transaction.transactions.push(transactionData);
+            transaction.taxPaid += taxToBePaid;
+        }
+
+        await transaction.save();
 
         return NextResponse.json({
             message: "Stock sold successfully",

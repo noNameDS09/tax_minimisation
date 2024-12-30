@@ -1,5 +1,6 @@
 import { connect } from "@/dbconfig/dbConfig";
 import RealEstate from "@/models/realestateModel";
+import Transaction from "@/models/transactionModel";
 import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import { calculateTaxOnProfit } from "@/utils/taxCalculator";
@@ -70,6 +71,38 @@ export async function POST(request: NextRequest) {
         user.moneyEarned += totalReturn;
         user.taxPaid = (user.taxPaid || 0) + taxToBePaid;
         await user.save();
+
+
+        const transactionData = {
+            assetType: "realEstate",
+            assetDetails: {
+                realEstateName: realEstateName,
+            },
+            buyPrice: realEstate.buyRate,
+            buyQuantity: realEstate.quantity += quantity,
+            remainingQuantity: realEstate.quantity -= quantity,
+            buyDate: realEstate.buyDate,
+            sellPrice: currentRate,
+            sellQuantity: quantity,
+            sellDate: new Date(),
+            taxPaid: taxToBePaid,
+        };
+
+        let transaction = await Transaction.findOne({ _id: userId });
+
+        if (!transaction) {
+            transaction = new Transaction({
+                _id: userId,
+                transactions: [transactionData],
+                taxPaid: taxToBePaid,
+            });
+        } else {
+            transaction.transactions.push(transactionData);
+            transaction.taxPaid += taxToBePaid;
+        }
+
+        await transaction.save();
+
 
         return NextResponse.json({
             message: "Real Estate sold successfully",

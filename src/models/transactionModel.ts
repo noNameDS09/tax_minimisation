@@ -39,15 +39,19 @@ const transactionSchema = new mongoose.Schema(
 
                 buyPrice: {
                     type: Number,
-                    required: true,
+                    required: false,
                 },
                 buyQuantity: {
                     type: Number,
-                    required: true,
+                    required: false,
+                },
+                remainingQuantity: {
+                    type: Number,
+                    required: false,
                 },
                 buyDate: {
                     type: Date,
-                    required: true,
+                    required: false,
                 },
 
                 sellPrice: {

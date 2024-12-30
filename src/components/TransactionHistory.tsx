@@ -29,7 +29,7 @@ const TransactionHistory = () => {
         );
     }
 
-    if (!transactions || transactions.transactions.length === 0) {
+    if (!transactions || transactions === undefined) {
         return <div>No transactions found for this user.</div>;
     }
 
@@ -51,6 +51,9 @@ const TransactionHistory = () => {
                             </div>
                             <div className="text-sm text-gray-600">
                                 <strong>Buy Quantity:</strong> {transaction.buyQuantity}
+                            </div>
+                            <div className="text-sm text-gray-600">
+                                <strong>Remaining Quantity:</strong> {transaction.remainingQuantity}
                             </div>
                             <div className="text-sm text-gray-600">
                                 <strong>Buy Date:</strong> {new Date(transaction.buyDate).toLocaleDateString()}

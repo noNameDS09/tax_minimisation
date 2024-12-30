@@ -22,9 +22,6 @@ const poppins = Poppins({
 const Invest = () => {
   return (
     <div className="flex flex-col sm:flex-col md:flex-col justify-center items-center bg-[#00ffff11] min-h-screen">
-      <div className="w-[95%] sm:w-[70%] md:w-[40rem] mt-0">
-        <ChatBot />
-      </div>
 
       <div className="text-center w-[99%] mt-24 flex flex-col items-center">
         <div className={`${roboto.className} text-5xl tracking-wide text-green-700 mb-2`}>
@@ -42,6 +39,10 @@ const Invest = () => {
             <InvestInRealEstate />
           </div>
         </div>
+      </div>
+
+      <div className="w-[95%] sm:w-[70%] md:w-[90%] mt-0">
+        <ChatBot />
       </div>
 
       <div className="w-5/6 mb-6">

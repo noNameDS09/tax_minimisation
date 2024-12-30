@@ -8,7 +8,7 @@ const page = () => {
         <TaxReport />
       </div>
       <div>
-        <TransactionHistory />
+        
       </div>
     </div>
   )

@@ -13,7 +13,6 @@ const LogoutPage = () => {
         const response = await axios.post('/api/users/logout');
 
         if (response.data.success) {
-          // window.location.reload();
           toast.success('You have successfully logged out!');
           setTimeout(() => {
             router.push('/login');

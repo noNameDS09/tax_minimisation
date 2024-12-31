@@ -1,3 +1,4 @@
+import ChatBotSuggestion from '@/components/ChatBotSuggestion'
 import TaxReport from '@/components/TaxReport'
 import TransactionHistory from '@/components/TransactionHistory'
 
@@ -8,7 +9,7 @@ const page = () => {
         <TaxReport />
       </div>
       <div>
-        
+      <ChatBotSuggestion />
       </div>
     </div>
   )

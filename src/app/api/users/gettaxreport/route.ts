@@ -11,7 +11,6 @@ connect();
 export async function GET(request: NextRequest) {
     try {
         const userId = await getDataFromToken(request); // Get userId from token
-        // console.log("Decoded userId:", userId);
 
         if (!userId) {
             return NextResponse.json(
@@ -27,7 +26,6 @@ export async function GET(request: NextRequest) {
         const userTax = await User.findOne({ _id: userId }).select(
             "taxPaid -_id"
         );
-        // console.log(typeof(userTax))
         if (!userTax) {
             return NextResponse.json({ message: "No tax" }, { status: 200 });
         }
@@ -43,7 +41,6 @@ export async function GET(request: NextRequest) {
         let vehicleTax = await Vehicle.findOne({ _id: userId }).select(
             "taxPaid -_id"
         );
-        // console.log(vehicleTax)
         if (!vehicleTax) {
             vehicleTax = 0;
         }
@@ -51,7 +48,6 @@ export async function GET(request: NextRequest) {
         let realEstateTax = await RealEstate.findOne({ _id: userId }).select(
             "taxPaid -_id"
         );
-        // console.log(realEstateTax)
         if (!realEstateTax) {
             realEstateTax = 0;
         }

@@ -24,6 +24,7 @@
     "jsonwebtoken": "^9.0.2",
     "langchain": "^0.3.8",
     "lucide-react": "^0.469.0",
+    "marked": "^15.0.4",
     "mongoose": "^8.9.2",
     "next": "15.1.2",
     "react": "^19.0.0",

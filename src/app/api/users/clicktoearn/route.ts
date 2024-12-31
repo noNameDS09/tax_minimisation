@@ -15,12 +15,10 @@ export async function POST(request: NextRequest) {
         }
 
         const user = await User.findOne({ _id: userId }).select("-password");
-        // console.log(user)
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }
         const moneyearned =  await clickToEarn(user.salary);
-        // console.log(user.salary)
         if(user.salary - moneyearned < 0 || user.salary === 0){
             return NextResponse.json({message: "Insufficient balance!"}, {status:400})
         }

@@ -34,6 +34,6 @@ async function Chatbot(userPrompt: string) {
 
 export async function runChatbot(prompt: string) {
     const response = await Chatbot(prompt);
-    console.log(response);
+    // console.log(response);
     return response;
 };

@@ -19,17 +19,13 @@ export default function LoginPage() {
         try {
             setLoading(true);
             const response = await axios.post("/api/users/login", user);
-            // Success response, show success toast
             toast.success("Login success");
             window.location.reload();
             setTimeout(() => {
                 router.push("/");
             }, 10000);
         } catch (error: any) {
-            // Handle error from backend
             if (error.response) {
-                // const errorMessage = error.response.data.error || error.message;
-                // alert(errorMessage);
                 setError(true);
             } else {
                 alert("An error occurred. Please try again.");

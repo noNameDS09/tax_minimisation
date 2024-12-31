@@ -51,8 +51,29 @@ const ChatBot = () => {
 
 
 
-    const handleStartChat = () => {
-        setChatVisible(!chatVisible); // Make chatbot visible
+    const handleStartChat = async () => {
+        setLoading(true);
+        setError(null);
+        setMessages((prevMessages) => [
+            ...prevMessages,
+            { text: "Hello", sender: 'user' }
+        ]);
+        setPrompt("");
+
+        try {
+            const response = await axios.post('/api/users/chatbot', { prompt });
+            const botResponse = response.data.output;
+
+            setMessages((prevMessages) => [
+                ...prevMessages,
+                { text: botResponse, sender: 'bot' }
+            ]);
+        } catch (error) {
+            console.error('Error during generating', error);
+            setError('Failed to generate. Please try again.');
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -106,15 +127,13 @@ const ChatBot = () => {
                             className="mt-6 px-6 py-3 text-white bg-sky-500 rounded-md hover:bg-sky-600 transition duration-300"
                             onClick={handleStartChat}
                         >
-                            {
-                                !chatVisible ? "Start conversation" : "Stop Conversation"
-                            }
+                            Start conversation
                         </button>
                     </div>
                 </div>
             </section>
             <div
-                className={`w-full md:w-2/3 lg:w-[30rem] mx-auto bg-[#f5f6fa] shadow-lg rounded-3xl p-8 space-y-6 transition-opacity duration-500 ${chatVisible ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
+                className={`w-full md:w-2/3 lg:w-[30rem] mx-auto bg-[#f5f6fa] shadow-lg rounded-3xl p-8 space-y-6 transition-opacity duration-500 ${chatVisible ? 'opacity-100' : 'opacity-100 pointer-events-none'}`}
             >
                 <h2 className="text-3xl font-semibold text-center text-gray-800">ChatBot</h2>
                 <div className="space-y-4 h-[calc(100vh-20.5rem)] overflow-y-auto px-4">

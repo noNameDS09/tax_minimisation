@@ -1,5 +1,4 @@
 'use client';
-
 import gsap from "gsap";
 import { ScrollTrigger } from 'gsap/dist/ScrollTrigger'
 import { useEffect } from "react";
@@ -47,7 +46,6 @@ export default function Hero() {
     }, [])
     return (
         <div className="mx-auto px-0 py-8 flex flex-col text-gray-900 mt-20 selection:bg-sky-500/70">
-            {/* Intro Section */}
             <div className="text-center mb-16 pt-10">
                 <h1 className="text-4xl  font-bold text-blue-600 mb-4">
                     Empower Your Financial Journey with <span className="before:block before:absolute before:-inset-1 before:-skew-y-3 before:rounded-xl before:bg-sky-500 relative inline-block">
@@ -59,7 +57,6 @@ export default function Hero() {
                 </p>
             </div>
 
-            {/* Description Section */}
             <div className="flex flex-col md:flex-col lg:flex-row px-20">
                 <div>
                     <img

@@ -23,9 +23,6 @@ export async function GET(request: NextRequest){
         const stockData = await Stock.find({_id: userId});
         const vehicleData = await Vehicle.find({_id: userId});
         const realEstateData = await RealEstate.find({_id: userId});
-        // console.log(typeof(stockData))
-        // console.log(typeof(vehicleData))
-        // console.log(typeof(realEstateData))
         return NextResponse.json({
             stockData,
             vehicleData,

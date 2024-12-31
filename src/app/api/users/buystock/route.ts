@@ -14,17 +14,15 @@ export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
         const { stockSymbol, quantity, rate } = reqBody;
-        const tax = calculateTax(quantity * rate, 0.005).toFixed(2);
-        const totalCost = quantity * rate + tax;
+        const tax: number = parseFloat(calculateTax(quantity * rate, 0.005).toFixed(2));
+        const totalCost: number = quantity * rate + tax;
         const userId = await getDataFromToken(request);
-
         if (!userId || !mongoose.Types.ObjectId.isValid(userId)) {
             return NextResponse.json(
                 { message: "Invalid user ID" },
                 { status: 400 }
             );
         }
-
         const user = await User.findById(userId).select("-password");
         if (!user) {
             return NextResponse.json(
@@ -33,7 +31,7 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        if (typeof user.salary !== 'number' || isNaN(user.salary)) {
+        if (typeof user.salary !== "number" || isNaN(user.salary)) {
             return NextResponse.json(
                 { error: "Invalid salary value" },
                 { status: 400 }
@@ -46,16 +44,17 @@ export async function POST(request: NextRequest) {
                 { status: 400 }
             );
         }
-        // console.log(`user.taxPaid : ${user.taxPaid}`)
         user.salary -= totalCost;
-        user.taxPaid = (typeof user.taxPaid === 'number' && !isNaN(user.taxPaid)) ? user.taxPaid : 0;
+        user.taxPaid =
+            typeof user.taxPaid === "number" && !isNaN(user.taxPaid)
+                ? user.taxPaid
+                : 0;
         user.taxPaid += tax;
-        // console.log(`tax stock : ${tax}`)
-        
+
         await user.save();
-        
+
         let existingStock = await Stock.findOne({ _id: userId });
-        
+
         if (existingStock) {
             existingStock.stocks.push({
                 stockSymbol,
@@ -65,7 +64,7 @@ export async function POST(request: NextRequest) {
                 buyDate: new Date(),
             });
             existingStock.taxPaid += tax;
-            
+
             await existingStock.save();
         } else {
             const newStock = new Stock({
@@ -85,10 +84,16 @@ export async function POST(request: NextRequest) {
             await newStock.save();
         }
         const assetDetails = {
-            stockSymbol: stockSymbol
-        }
+            stockSymbol: stockSymbol,
+        };
         // for transaction history
-        await logTransaction(userId, "stock", assetDetails, totalCost, quantity);
+        await logTransaction(
+            userId,
+            "stock",
+            assetDetails,
+            totalCost,
+            quantity
+        );
 
         return NextResponse.json({
             message: "Stock purchased successfully",

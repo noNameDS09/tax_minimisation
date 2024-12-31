@@ -7,15 +7,13 @@ connect();
 
 export async function GET(request: NextRequest) {
     try {
-        const userId = await getDataFromToken(request);  // Get userId from token
-        // console.log("Decoded userId:", userId);
+        const userId = await getDataFromToken(request);
 
         if (!userId) {
             return NextResponse.json({ message: "Invalid or missing token" }, { status: 401 });
         }
 
         const user = await User.findOne({ _id: userId }).select("-password");
-        // console.log(user)
         if (!user) {
             return NextResponse.json({ message: "User not found" }, { status: 404 });
         }

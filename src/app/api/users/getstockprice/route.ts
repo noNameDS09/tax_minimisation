@@ -28,7 +28,6 @@ export async function GET(request: Request) {
             );
           }
         const data = await getStockQuote(symbol);
-        // console.log(data);
         return NextResponse.json({ stockData: data }, {status:200});
     } catch (error:any) {
         console.error("Error fetching stock data:", error);

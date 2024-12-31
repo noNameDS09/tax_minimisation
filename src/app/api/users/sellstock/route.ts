@@ -4,7 +4,6 @@ import Transaction from "@/models/transactionModel";
 import User from "@/models/userModel";
 import { getDataFromToken } from "@/utils/getDataFromToken";
 import { calculateTaxOnProfit } from "@/utils/taxCalculator";
-import { error } from "console";
 import { NextRequest, NextResponse } from "next/server";
 
 connect();
@@ -17,10 +16,7 @@ export async function POST(request: NextRequest) {
 
         const userStock = await Stock.findOne({
             _id: userId,
-            //   'stocks.stockSymbol': stockSymbol,
-            //   'stocks.buyRate': buyingRate,
         });
-        // console.log(userStock.stocks);
 
         if (!userStock) {
             return NextResponse.json(
@@ -40,7 +36,6 @@ export async function POST(request: NextRequest) {
                 break;
             }
         }
-        // console.log(`after userStock : ${stock}`);
 
         if (!stock) {
             return NextResponse.json(
@@ -63,14 +58,11 @@ export async function POST(request: NextRequest) {
             quantity,
             0.12
         );
-        // console.log(taxToBePaid);
         userStock.taxPaid += taxToBePaid;
 
         await userStock.save();
         const totalReturn = quantity * currentRate - taxToBePaid;
-        // console.log(totalReturn);
         const user = await User.findOne({ _id: userId });
-        // console.log(user)
         user.moneyEarned + (user.moneyEarned | 0) +  totalReturn;
         user.taxPaid = (user.taxPaid || 0) + taxToBePaid;
         await user.save();

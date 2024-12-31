@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 const AboutUs = () => {
 
@@ -21,7 +21,6 @@ const AboutUs = () => {
                         </span>
                     </div>
 
-                    {/* Empowering the Community Section */}
                     <div className="text-center">
                         <h2 className="text-3xl font-bold text-gray-900 sm:text-4xl">
                             Empowering the Community

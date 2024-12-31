@@ -17,7 +17,6 @@ export async function POST(request: NextRequest) {
         const userRealEstate = await RealEstate.findOne({
             _id: userId,
         });
-        // console.log(userRealEstate.realestates);
 
         if (!userRealEstate) {
             return NextResponse.json(
@@ -28,7 +27,6 @@ export async function POST(request: NextRequest) {
 
         let realEstate = null;
         for (let s of userRealEstate.realestates) {
-            // console.log(s)
             if (
                 s.realEstateName === realEstateName &&
                 s.buyRate === buyingRate &&
@@ -38,7 +36,6 @@ export async function POST(request: NextRequest) {
                 break;
             }
         }
-        // console.log(userRealEstate)
 
         if (!realEstate) {
             return NextResponse.json(
@@ -61,12 +58,10 @@ export async function POST(request: NextRequest) {
             quantity,
             0.18
         );
-        // console.log(taxToBePaid);
         userRealEstate.taxPaid += taxToBePaid;
 
         await userRealEstate.save();
         const totalReturn = quantity * currentRate - taxToBePaid;
-        // console.log(totalReturn);
         const user = await User.findOne({ _id: userId });
         user.moneyEarned += totalReturn;
         user.taxPaid = (user.taxPaid || 0) + taxToBePaid;

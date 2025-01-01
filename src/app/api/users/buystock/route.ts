@@ -49,7 +49,8 @@ export async function POST(request: NextRequest) {
             typeof user.taxPaid === "number" && !isNaN(user.taxPaid)
                 ? user.taxPaid
                 : 0;
-        user.taxPaid += tax;
+        user.taxPaid = parseFloat((user.taxPaid || 0) + tax);
+        user.taxPaid = parseFloat(user.taxPaid.toFixed(2))
 
         await user.save();
 
@@ -64,6 +65,7 @@ export async function POST(request: NextRequest) {
                 buyDate: new Date(),
             });
             existingStock.taxPaid += tax;
+            existingStock.taxPaid = parseFloat(existingStock.taxPaid.toFixed(2));
 
             await existingStock.save();
         } else {

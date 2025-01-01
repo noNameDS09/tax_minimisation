@@ -8,7 +8,7 @@ connect();
 export async function POST(request: NextRequest) {
     try {
         const reqBody = await request.json();
-        const { userJob, userSalary, userMoneyEarned, userTaxPaid } = reqBody;
+        let { userJob, userSalary, userMoneyEarned, userTaxPaid } = reqBody;
 
         const userId = await getDataFromToken(request);
         console.log("User ID from token:", userId);
@@ -27,9 +27,12 @@ export async function POST(request: NextRequest) {
         }
 
         existingProfile.job = userJob;
-        existingProfile.salary = userSalary;
+        userSalary = parseFloat(userSalary)
+        existingProfile.salary = parseFloat(userSalary.toFixed(2));
+        userMoneyEarned = parseFloat(userMoneyEarned)
         existingProfile.moneyEarned = userMoneyEarned;
-        existingProfile.taxPaid = userTaxPaid;
+        userTaxPaid = parseFloat(userTaxPaid)
+        existingProfile.taxPaid = parseFloat(userTaxPaid.toFixed(2));
         const updatedProfile = await existingProfile.save();
 
         return NextResponse.json({

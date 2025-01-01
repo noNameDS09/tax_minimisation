@@ -3,7 +3,7 @@
 const AboutUs = () => {
 
     return (
-        <section className="py-16 px-4 sm:px-6 lg:px-8 selection:bg-sky-500/70">
+        <section className="py-16 px-4 sm:px-6 lg:px-8 selection:bg-sky-500/70 -mt-10">
             <div className="max-w-7xl mx-auto flex justify-center items-center gap-x-5">
                 <div className={`w-[70%] p-10 bg-[#8cebf750] rounded-3xl`}>
                     <div className="mb-16 text-center">
@@ -40,6 +40,11 @@ const AboutUs = () => {
                 <div className="bg-sky-100 p-10 rounded-xl w-[40%] hidden lg:block">
                     <img src="/assets/invest1.avif" className="rounded-2xl" />
                 </div>
+            </div>
+            <div className="bg-blue-600 text-white py-16 mt-28 text-center rounded-2xl mb-28">
+                <h2 className="text-3xl font-bold mb-4">Ready to Take Control of Your Financial Future?</h2>
+                <p className="text-lg font-roboto mb-8">Start using TaxWise today and make smarter financial decisions with personalized guidance and insights.</p>
+                <a href="/login" className="bg-yellow-500 text-blue-900 py-3 px-6 rounded-full text-xl hover:bg-yellow-400 transition duration-300">Get Started</a>
             </div>
         </section>
 

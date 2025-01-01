@@ -64,7 +64,8 @@ export async function POST(request: NextRequest) {
         const totalReturn = quantity * currentRate - taxToBePaid;
         const user = await User.findOne({ _id: userId });
         user.moneyEarned + (user.moneyEarned | 0) +  totalReturn;
-        user.taxPaid = (user.taxPaid || 0) + taxToBePaid;
+        user.taxPaid = parseFloat((user.taxPaid || 0) + taxToBePaid);
+        user.taxPaid = parseFloat(user.taxPaid.toFixed(2))
         await user.save();
 
         const transactionData = {

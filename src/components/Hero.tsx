@@ -69,15 +69,21 @@ export default function Hero() {
                     <h2 className="flex flex-row justify-center text-2xl text-center font-semibold text-green-600 mb-6 lg:-ml-24">What is <p className="underline font-semibold ml-2 text-blue-600">TaxWise?</p></h2>
                     <p className="text-lg font-roboto text-gray-700 leading-relaxed lg:-ml-24">
                         TaxWise is an intelligent&nbsp;&nbsp;
-                        <span className="bg-yellow-300 rounded-sm p-1 px-0">AI-driven financial assistant  </span> 
-                        &nbsp;designed to guide you through the complexities of tax-saving strategies and investment decisions. Whether you're looking to optimize your tax filings, explore tax-deferred accounts, or receive personalized investment recommendations, TaxWise provides 
-                        <span className="bg-yellow-300 rounded-sm p-1">real-time insights and expert advice</span> 
+                        <span className="bg-yellow-300 rounded-sm p-1 px-0">AI-driven financial assistant  </span>
+                        &nbsp;designed to guide you through the complexities of tax-saving strategies and investment decisions. Whether you're looking to optimize your tax filings, explore tax-deferred accounts, or receive personalized investment recommendations, TaxWise provides
+                        <span className="bg-yellow-300 rounded-sm p-1">real-time insights and expert advice</span>
                         tailored to your financial goals. With its easy-to-use interface and actionable guidance, TaxWise helps you make smarter, more informed decisions, ensuring you maximize your savings and grow your wealth effectively.
                     </p>
                 </div>
             </div>
 
             {/* Features Section */}
+
+            <div className="text-4xl font-bold text-center">
+                Features
+            </div>
+            <span className="relative inset-x-0 w-[12rem] mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent h-[2px] mb-10" />
+
             <div className="this opacity-0 flex flex-col justify-center items-center gap-8 w-full mb-16">
                 <div className="flex flex-wrap justify-center gap-6 w-full max-w-6xl mx-auto">
                     <div className="bg-white hover:shadow-lg duration-300 rounded-lg p-6 text-center w-full sm:w-72">
@@ -116,11 +122,7 @@ export default function Hero() {
                 </div>
             </div>
 
-            <div className="bg-blue-600 text-white py-16 mt-20 text-center">
-                <h2 className="text-3xl font-bold mb-4">Ready to Take Control of Your Financial Future?</h2>
-                <p className="text-lg font-roboto mb-8">Start using TaxWise today and make smarter financial decisions with personalized guidance and insights.</p>
-                <a href="/signup" className="bg-yellow-500 text-blue-900 py-3 px-6 rounded-full text-xl hover:bg-yellow-400 transition duration-300">Get Started</a>
-            </div>
+
         </div>
     );
 }

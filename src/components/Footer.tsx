@@ -19,7 +19,7 @@ const Footer = () => {
       <div className="container mx-auto px-6 w-[90%]">
         <div className="footer-content flex flex-wrap md:flex-row w-full justify-between items-start gap-8">
           <div className="space-y-6">
-            <h3 className="text-2xl font-semibold">DevDeities</h3>
+            <h3 className="text-2xl font-semibold">TaxWise</h3>
             <p className="text-sm">
               Your trusted partner in investment strategies,<br /> offering expert guidance for financial growth.
             </p>

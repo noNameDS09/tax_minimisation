@@ -7,17 +7,14 @@ export default function Home() {
   const [suggestion, setSuggestion] = useState('');
   const [error, setError] = useState('');
 
-  // Function to handle button click
   const handleClick = async () => {
     setLoading(true);
     setError('');
     setSuggestion('');
     
     try {
-      // Sending a request to your Next.js API
       const response = await axios.get('/api/users/chatbotsuggestion');
 
-      // Assuming the response data has a field 'message' with the suggestion
       setSuggestion(response.data.message);
     } catch (err) {
       setError('Error fetching suggestion');
@@ -27,7 +24,7 @@ export default function Home() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="max-h-[70rem] flex items-center justify-center bg-gray-100 ">
       <div className="max-w-lg w-full bg-white p-6 rounded-lg shadow-md">
         <h1 className="text-2xl font-bold text-center mb-4">Chatbot Investment Suggestions</h1>
         
@@ -39,13 +36,12 @@ export default function Home() {
         </button>
 
         {suggestion && (
-          <div className="mt-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 rounded">
+          <div className="mt-4 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 rounded overflow-scroll max-h-[50rem]">
             <h3 className="font-semibold">Chatbot Suggestion:</h3>
-            {/* Convert the markdown suggestion to HTML */}
             <div
               className="prose mt-4"
               dangerouslySetInnerHTML={{
-                __html: marked(suggestion),  // Convert markdown to HTML
+                __html: marked(suggestion),
               }}
             />
           </div>

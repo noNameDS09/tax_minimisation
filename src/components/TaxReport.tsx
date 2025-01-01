@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from "react";
 import TransactionHistory from "./TransactionHistory";
+import ChatBotSuggestion from "./ChatBotSuggestion";
 interface TaxData {
   message: string;
   userTax: number;
@@ -51,7 +52,6 @@ const TaxReport = () => {
             <p className="text-red-600 text-center">{error}</p>
           ) : (
             <div>
-              {/* <p className="text-lg text-center font-medium text-gray-700 mb-4">{taxData?.message}</p> */}
               <div className="space-y-4">
                 <div className="flex justify-between">
                   <span className="font-semibold text-gray-800">User Tax:</span>
@@ -74,15 +74,22 @@ const TaxReport = () => {
           )}
         </div>
       </div>
-      {
-        (taxData?.userTax > 0) ? (
-          <div>
-            <TransactionHistory />
-          </div>
-        ): (
-          <div></div>
-        )
-      }
+      <div>
+        {
+          (taxData?.userTax > 0) ? (
+            <div className="flex justify-center items-center">
+              <div>
+                <TransactionHistory />
+              </div>
+              <div>
+                <ChatBotSuggestion />
+              </div>
+            </div>
+          ) : (
+            <div></div>
+          )
+        }
+      </div>
     </>
   );
 };

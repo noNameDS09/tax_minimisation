@@ -41,6 +41,17 @@ const SellStock = () => {
     fetchStockData();
   }, []);
 
+  const fetchStockPrice = async (symbol: string) => {
+    try {
+      const response = await axios.get(`/api/users/getstockprice?symbol=${symbol}`);
+      if (response.data && response.data.stockData) {
+        setCurrentRate(response.data.stockData);
+      }
+    } catch (error) {
+      setErrorMessage("Failed to fetch stock price. Please try again.");
+    }
+  };
+
   const handleStockChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const stockId = event.target.value;
     const stock = stockData.find(stock => stock._id === stockId);
@@ -48,6 +59,7 @@ const SellStock = () => {
       setSelectedStock(stock);
       setQuantity(stock.quantity);
       setBuyRate(stock.buyRate);
+      fetchStockPrice(stock.stockSymbol);
     }
   };
 

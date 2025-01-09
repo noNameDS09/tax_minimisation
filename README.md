@@ -53,7 +53,7 @@ npm install
 #### Set up the environment variables like :
 ```
 MONGODB_URI = mongodb://127.0.0.1:27017/<yourdatabasename>
-TOKEN_SECRET = yourtokensecret
+TOKEN_SECRET = yourtokensecrete
 DOMAIN = http://localhost:3000
 CHATBOT_API = <getTheChatBotApiKeyFromLangChain>
 CHATBOT_MODEL_NAME = <geminiModel>

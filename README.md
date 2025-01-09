@@ -64,5 +64,3 @@ US_STOCKS_API_KEY = <getApiKeyFrom'finnhub'>
 npm run dev
 ```
 
-## License
-This project is licensed under the MIT License.

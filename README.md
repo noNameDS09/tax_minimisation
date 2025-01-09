@@ -1,4 +1,4 @@
-# Finance Management Website (Next.js)
+# Finance Management Website
 
 Welcome to the **Finance Management Website** built with **Next.js**! This platform enables users to manage their finances, including salary management, asset trading, and portfolio management. Users can interact with real-time stock, vehicle, and real estate markets, track their transactions, and receive financial advice through an integrated chatbot.
 
